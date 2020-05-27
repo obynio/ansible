@@ -1,0 +1,29 @@
+---
+- name: create shiori directory
+  file:
+    path: /srv/docker/shiori
+    state: directory
+    owner: root 
+    group: docker
+
+- name: creating the dedicated network
+  docker_network:
+    name: http
+
+- name: launching shiori container
+  docker_container:
+    name: shiori
+    image: radhifadlillah/shiori:latest
+    restart_policy: unless-stopped
+    networks_cli_compatible: true
+    recreate: true
+    networks:
+      - name: http
+    volumes:
+      - /srv/docker/shiori:/srv/shiori
+    labels:
+      traefik.enable: 'true'
+      traefik.port: '8080'
+      traefik.http.routers.shiori.rule: 'Host(`shiori.obyn.io`)'
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

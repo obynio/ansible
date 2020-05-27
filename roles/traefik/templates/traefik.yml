@@ -15,9 +15,14 @@ entryPoints:
       tls:
         certResolver: certbot
         domains:
+          - main: 'obyn.io'
+            sans:
+              - '*.obyn.io'
           - main: 'segfault.page'
             sans:
               - '*.segfault.page'
+ 
+
 
 certificatesResolvers:
   certbot:

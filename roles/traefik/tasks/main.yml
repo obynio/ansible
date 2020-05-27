@@ -27,8 +27,8 @@
     name: traefik
     image: traefik:2.2
     restart_policy: unless-stopped
-    recreate: true
     networks_cli_compatible: true
+    recreate: true
     networks:
       - name: http
     ports:

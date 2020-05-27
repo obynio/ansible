@@ -1,4 +1,4 @@
 ---
 - hosts: production
   roles:
-    - base
+    - shiori
