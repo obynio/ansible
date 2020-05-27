@@ -1,0 +1,47 @@
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+Protocol 2
+HostKey /etc/ssh/ssh_host_rsa_key
+SyslogFacility AUTHPRIV
+LogLevel INFO
+
+# Auth
+
+LoginGraceTime 2m
+PermitRootLogin no
+StrictModes yes
+MaxAuthTries 3
+MaxSessions 10
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+IgnoreRhosts yes
+PasswordAuthentication no
+PermitEmptyPasswords no
+UsePam yes
+AuthenticationMethods publickey
+
+# Env
+
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+
+# Forwards
+
+AllowAgentForwarding yes
+AllowTcpForwarding no
+GatewayPorts no
+X11Forwarding no
+PrintMotd no
+TCPKeepAlive yes
+PermitUserEnvironment no
+ClientAliveInterval 0
+ClientAliveCountMax 3
+PidFile /var/run/sshd.pid
+PermitTunnel no
+
+Banner none
+Subsystem sftp internal-sftp
