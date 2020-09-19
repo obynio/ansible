@@ -1,0 +1,9 @@
+wiki.leon.re {
+	reverse_proxy 127.0.0.1:3000
+
+	tls {
+		dns gandi {{ caddy_gandi_token }}
+	}
+}
+
+

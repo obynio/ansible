@@ -1,0 +1,39 @@
+---
+- name: install prezto
+  become: yes
+  become_user: '{{ user }}'
+  git:
+    repo: https://github.com/sorin-ionescu/prezto.git
+    dest: '~/.zprezto'
+    force: yes
+
+- name: add symbolic link dotfiles
+  become: yes
+  become_user: '{{ user }}'
+  file: 
+    src: '~/.zprezto/runcoms/{{ item }}'
+    dest: '~/.{{ item }}'
+    state: "link"
+  with_items:
+    - zlogin
+    - zlogout
+    - zpreztorc
+    - zprofile
+    - zshenv
+    - zshrc
+
+- name: copy zshrc
+  become: yes
+  become_user: '{{ user }}'
+  copy:
+    src: 'zsh/zshrc'
+    dest: '~/.zprezto/runcoms/zshrc'
+
+- name: copy zpreztorc
+  become: yes
+  become_user: '{{ user }}'
+  copy:
+    src: 'zsh/zpreztorc'
+    dest: '~/.zprezto/runcoms/zpreztorc'
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

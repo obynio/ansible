@@ -1,0 +1,44 @@
+#
+# Executes commands at the start of an interactive session.
+#
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+#
+# Editors
+#
+
+export EDITOR="vim"
+export VISUAL="vim"
+
+#
+# Misc
+#
+
+# Set Golang PATH
+# Where to search for binaries and packages
+if (( $+commands[go] )); then
+    export GOPATH=$(go env GOPATH)
+    export PATH=$PATH:$(go env GOPATH)/bin
+fi
+
+# Set Lua PATH
+# Where to search for lua binaries and packages
+if (( $+commands[luarocks] )); then
+    eval `luarocks path --bin`
+fi
+
+# Set Ruby PATH
+# Where to search for ruby binaries and packages
+if (( $+commands[luarocks] )); then
+    eval "$(rbenv init -)"
+fi
+
+# Force AWS assume role in Terraform
+export AWS_SDK_LOAD_CONFIG=1
+
+# Overwrite default MacOS history location
+export HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"

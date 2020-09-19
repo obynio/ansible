@@ -1,0 +1,59 @@
+---
+- name: download caddy
+  get_url:
+    url: https://caddyserver.com/api/download?os=linux&arch=amd64&p=github.com%2Fcaddy-dns%2Fgandi
+    dest: '{{ caddy_bin_path }}'
+    mode: '0755'
+
+- name: create caddy group
+  group:
+    name: '{{ caddy_group_name }}'
+    gid: '{{ caddy_group_id }}'
+
+- name: create caddy user
+  user:
+    name: '{{ caddy_user_name }}'
+    uid: '{{ caddy_user_id | int }}'
+    group: '{{ caddy_group_id | int }}'
+    home: '{{ caddy_user_home_dir }}'
+    create_home: true
+    shell: '/usr/sbin/nologin'
+    system: true
+
+- name: create systemd service
+  template:
+    src: caddy.service
+    dest: /etc/systemd/system/caddy.service
+    mode: 0644
+  notify: service modified
+
+- name: create config directory
+  file:
+    path: '{{ caddy_config_path }}'
+    state: directory
+    owner: '{{ caddy_user_name }}'
+    group: '{{ caddy_group_name }}'
+
+- name: create log directory
+  file:
+    path: '{{ caddy_log_path }}'
+    state: directory
+    owner: '{{ caddy_user_name }}'
+    group: '{{ caddy_group_name }}'
+
+- name: copy caddyfile
+  template:
+    src: caddyfile
+    dest: '{{ caddy_config_path }}/caddyfile'
+    owner: '{{ caddy_user_name }}'
+    group: '{{ caddy_group_name }}'
+    mode: '0644'
+  notify: caddy restart
+
+- name: enable and start caddy service
+  service:
+    name: 'caddy.service'
+    state: started
+    enabled: true
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

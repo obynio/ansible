@@ -1,0 +1,57 @@
+#
+# Sets Prezto options.
+#
+
+## General
+
+# Color output.
+zstyle ':prezto:*:*' color 'yes'
+
+# Set the Prezto modules to load (browse modules). The order matters.
+zstyle ':prezto:load' pmodule \
+  'environment' \
+  'editor' \
+  'history' \
+  'directory' \
+  'utility' \
+  'completion' \
+  'archive' \
+  'git' \
+  'prompt' \
+  'history-substring-search'
+
+# Set the key mapping style to 'emacs' or 'vi'.
+zstyle ':prezto:module:editor' key-bindings 'vi'
+
+## Editor
+
+# Set the vi keybing in the terminal
+zstyle ':prezto:module:editor' key-bindings 'vi'
+
+## History Substring Search
+
+# Set the query found color.
+zstyle ':prezto:module:history-substring-search' color 'yes'
+
+## Git
+
+# Set the git log style.
+zstyle ':prezto:module:git:log:context' format 'oneline'
+
+# Disable the git aliases, we don't use them
+zstyle ':prezto:module:git:alias' skip 'yes'
+
+## Prompt
+
+# Set the prompt theme to load.
+zstyle ':prezto:module:prompt' theme 'sorin'
+
+# Set the prompt to display the return code along with an indicator for non-zero
+# return codes. This is not supported by all prompts.
+zstyle ':prezto:module:prompt' show-return-val 'yes'
+
+## Utility
+
+# Enabled safe options. This aliases cp, ln, mv and rm so that they prompt
+# before deleting or overwriting files.
+zstyle ':prezto:module:utility' safe-ops 'yes'

@@ -16,7 +16,7 @@
 
 - name: install sudo config
   copy:
-    src: etc/sudo/sudoers
+    src: sudo/sudoers
     dest: /etc/sudoers
     owner: root
     group: root
@@ -33,6 +33,9 @@
     shell: /bin/zsh
     groups: wheel,shepard,docker
 
+- import_tasks: prezto.yml
+  vars:
+    user: shepard
 
 - name: copy ssh pubkey for shepard
   authorized_key:
@@ -42,7 +45,7 @@
 
 - name: update sshd_config
   copy:
-    src: etc/ssh/sshd_config
+    src: ssh/sshd_config
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
