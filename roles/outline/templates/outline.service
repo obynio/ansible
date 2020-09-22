@@ -1,0 +1,20 @@
+{{ ansible_managed | comment(decoration="# ") }}
+
+[Unit]
+Description=Outline
+Documentation=https://www.getoutline.com/
+After=network.target
+
+[Service]
+User={{ outline_system_group }}
+Group={{ outline_system_user }}
+WorkingDirectory=/srv/outline
+EnvironmentFile=.env
+ExecStart=/usr/bin/node index.js
+TimeoutStopSec=5s
+PrivateTmp=true
+ProtectSystem=full
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

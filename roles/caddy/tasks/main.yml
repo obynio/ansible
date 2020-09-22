@@ -9,6 +9,7 @@
   group:
     name: '{{ caddy_group_name }}'
     gid: '{{ caddy_group_id }}'
+    system: true
 
 - name: create caddy user
   user:

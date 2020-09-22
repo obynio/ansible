@@ -1,0 +1,117 @@
+---
+- name: create outline system group
+  group:
+    name: '{{ outline_system_group }}'
+    system: true
+
+- name: create outline system user
+  user:
+    name: '{{ outline_system_user }}'
+    system: true
+    shell: '/sbin/nologin'
+    group: '{{ outline_system_group }}'
+    createhome: false
+
+- name: install pacman packages
+  package:
+    name: git,postgresql,redis,nodejs,npm,yarn
+    state: present
+
+- name: initialize postgresql
+  shell: initdb --locale=en_US.UTF-8 -E UTF8 -D /var/lib/postgres/data
+  become: yes
+  become_user: 'postgres'
+  args:
+    creates: /var/lib/postgres/data/pg_hba.conf
+
+- name: enable and start postgresql service
+  service:
+    name: 'postgresql.service'
+    state: started
+    enabled: yes
+
+- name: create database for outline
+  postgresql_db:
+    name: '{{ outline_postgres_db }}'
+
+- name: create user for outline
+  postgresql_user:
+    db: '{{ outline_postgres_db }}'
+    name: '{{ outline_postgres_user }}'
+    password: '{{ outline_postgres_password }}'
+  no_log: yes
+
+- name: enable and start redis service
+  service:
+    name: 'redis.service'
+    state: started
+    enabled: yes
+
+- name: create outline home
+  file:
+    path: '/srv/outline'
+    state: directory
+    owner: '{{ outline_system_user }}'
+    group: '{{ outline_system_group }}'
+    mode: 0775
+
+- name: install outline
+  become: yes
+  become_user: '{{ outline_system_user }}'
+  git:
+    repo: https://github.com/outline/outline.git
+    dest: '/srv/outline'
+    version: v0.47.0
+    force: yes
+
+- name: yarn install
+  become: yes
+  become_user: '{{ outline_system_user }}'
+  yarn:
+    path: /srv/outline
+    state: latest
+
+- name: create systemd service
+  template:
+    src: outline.service
+    dest: /etc/systemd/system/outline.service
+    mode: 0644
+  notify: service modified
+
+- name: copy env file
+  template:
+    src: env
+    dest: '/srv/outline/.env'
+    owner: '{{ outline_system_user }}'
+    group: '{{ outline_system_group }}'
+    mode: '0644'
+
+- name: copy database config
+  template:
+    src: database.json
+    dest: '/srv/outline/server/config'
+    owner: '{{ outline_system_user }}'
+    group: '{{ outline_system_group }}'
+    mode: '0644'
+
+- name: yarn build frontend
+  become: yes
+  become_user: '{{ outline_system_user }}'
+  shell: yarn build
+  args:
+    chdir: /srv/outline
+
+- name: yarn sequelize:migrate
+  become: yes
+  become_user: '{{ outline_system_user }}'
+  shell: yarn sequelize:migrate
+  args:
+    chdir: /srv/outline
+
+- name: enable and start outline service
+  service:
+    name: 'outline.service'
+    state: started
+    enabled: true
+
+# vim: set et st=2 sts=2 sw=2 ts=2:
