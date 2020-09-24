@@ -9,12 +9,11 @@ After=network.target
 User={{ outline_system_group }}
 Group={{ outline_system_user }}
 WorkingDirectory=/srv/outline
-EnvironmentFile=.env
+EnvironmentFile=/srv/outline/.env
 ExecStart=/usr/bin/node index.js
 TimeoutStopSec=5s
 PrivateTmp=true
 ProtectSystem=full
-Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

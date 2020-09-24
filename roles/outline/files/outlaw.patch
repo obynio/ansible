@@ -1,0 +1,107 @@
+From b44aa6e7ce81db1c3558719cb2a232db8cdc3a13 Mon Sep 17 00:00:00 2001
+From: Yohann Leon <yohann@leon.re>
+Date: Fri, 25 Sep 2020 00:38:27 +0200
+Subject: [PATCH] fix: apply outlaw patch
+
+---
+ app/components/Tab.js       |  3 ---
+ app/components/TeamLogo.js  |  1 -
+ app/scenes/Login/Notices.js |  5 +++++
+ server/auth/google.js       | 17 ++++++-----------
+ 4 files changed, 11 insertions(+), 15 deletions(-)
+
+diff --git a/app/components/Tab.js b/app/components/Tab.js
+index ef985ee1..a370193f 100644
+--- a/app/components/Tab.js
++++ b/app/components/Tab.js
+@@ -22,20 +22,17 @@ const StyledNavLink = styled(NavLink)`
+   &:hover {
+     color: ${(props) => props.theme.textSecondary};
+     border-bottom: 3px solid ${(props) => props.theme.divider};
+-    padding-bottom: 5px;
+   }
+ 
+   &:focus {
+     outline: none;
+     border-bottom: 3px solid
+       ${(props) => lighten(0.4, props.theme.buttonBackground)};
+-    padding-bottom: 5px;
+   }
+ `;
+ 
+ function Tab({ theme, ...rest }: Props) {
+   const activeStyle = {
+-    paddingBottom: "5px",
+     borderBottom: `3px solid ${theme.textSecondary}`,
+     color: theme.textSecondary,
+   };
+diff --git a/app/components/TeamLogo.js b/app/components/TeamLogo.js
+index 33711c7a..155d9c70 100644
+--- a/app/components/TeamLogo.js
++++ b/app/components/TeamLogo.js
+@@ -6,7 +6,6 @@ const TeamLogo = styled.img`
+   height: 38px;
+   border-radius: 4px;
+   background: ${(props) => props.theme.background};
+-  border: 1px solid ${(props) => props.theme.divider};
+ `;
+ 
+ export default TeamLogo;
+diff --git a/app/scenes/Login/Notices.js b/app/scenes/Login/Notices.js
+index bef63de2..f97500a4 100644
+--- a/app/scenes/Login/Notices.js
++++ b/app/scenes/Login/Notices.js
+@@ -51,6 +51,11 @@ export default function Notices({ notice }: Props) {
+           please contact a team admin.
+         </NoticeAlert>
+       )}
++      {notice === "denied" && (
++        <NoticeAlert>
++          You came to the wrong neighborhood
++        </NoticeAlert>
++      )}
+     </>
+   );
+ }
+diff --git a/server/auth/google.js b/server/auth/google.js
+index d7f12639..ea7a06a6 100644
+--- a/server/auth/google.js
++++ b/server/auth/google.js
+@@ -15,7 +15,7 @@ const client = new OAuth2Client(
+   process.env.GOOGLE_CLIENT_SECRET,
+   `${process.env.URL}/auth/google.callback`
+ );
+-const allowedDomainsEnv = process.env.GOOGLE_ALLOWED_DOMAINS;
++const allowedEmailsEnv = process.env.GOOGLE_ALLOWED_EMAILS;
+ 
+ // start the oauth process and redirect user to Google
+ router.get("google", async (ctx) => {
+@@ -42,20 +42,15 @@ router.get("google.callback", auth({ required: false }), async (ctx) => {
+     url: "https://www.googleapis.com/oauth2/v1/userinfo",
+   });
+ 
+-  if (!profile.data.hd) {
+-    ctx.redirect("/?notice=google-hd");
+-    return;
+-  }
++  const allowedEmails = allowedEmailsEnv && allowedEmailsEnv.split(',');
+ 
+-  // allow all domains by default if the env is not set
+-  const allowedDomains = allowedDomainsEnv && allowedDomainsEnv.split(",");
+-  if (allowedDomains && !allowedDomains.includes(profile.data.hd)) {
+-    ctx.redirect("/?notice=hd-not-allowed");
++  if (allowedEmails && !allowedEmails.includes(profile.data.email)) {
++    ctx.redirect('/?notice=denied');
+     return;
+   }
+ 
+-  const googleId = profile.data.hd;
+-  const hostname = profile.data.hd.split(".")[0];
++  const googleId = process.env.GOOGLE_TEAM_ID;
++  const hostname = googleId.split('.')[0];
+   const teamName = capitalize(hostname);
+ 
+   // attempt to get logo from Clearbit API. If one doesn't exist then
+-- 
+2.28.0
+

@@ -22,7 +22,7 @@
   become: yes
   become_user: 'postgres'
   args:
-    creates: /var/lib/postgres/data/pg_hba.conf
+    creates: '/var/lib/postgres/data/pg_hba.conf'
 
 - name: enable and start postgresql service
   service:
@@ -61,52 +61,63 @@
   git:
     repo: https://github.com/outline/outline.git
     dest: '/srv/outline'
-    version: v0.47.0
+    version: v0.47.1
     force: yes
 
 - name: yarn install
   become: yes
   become_user: '{{ outline_system_user }}'
   yarn:
-    path: /srv/outline
+    path: '/srv/outline'
     state: latest
 
 - name: create systemd service
   template:
-    src: outline.service
-    dest: /etc/systemd/system/outline.service
-    mode: 0644
+    src: 'outline.service'
+    dest: '/etc/systemd/system/outline.service'
   notify: service modified
 
 - name: copy env file
   template:
-    src: env
+    src: 'env'
     dest: '/srv/outline/.env'
     owner: '{{ outline_system_user }}'
     group: '{{ outline_system_group }}'
-    mode: '0644'
 
 - name: copy database config
-  template:
-    src: database.json
+  copy:
+    src: 'database.json'
     dest: '/srv/outline/server/config'
     owner: '{{ outline_system_user }}'
     group: '{{ outline_system_group }}'
-    mode: '0644'
+
+- name: copy outlaw patch
+  copy:
+    src: 'outlaw.patch'
+    dest: '/srv/outline'
+    owner: '{{ outline_system_user }}'
+    group: '{{ outline_system_group }}'
+
+- name: git apply patch
+  become: yes
+  become_user: '{{ outline_system_user }}'
+  shell: git apply outlaw.patch
+  args:
+    chdir: '/srv/outline'
 
 - name: yarn build frontend
   become: yes
   become_user: '{{ outline_system_user }}'
   shell: yarn build
   args:
-    chdir: /srv/outline
+    chdir: '/srv/outline'
 
 - name: yarn sequelize:migrate
   become: yes
   become_user: '{{ outline_system_user }}'
   shell: yarn sequelize:migrate
   args:
-    chdir: /srv/outline
+    chdir: '/srv/outline'
 
 - name: enable and start outline service
   service:

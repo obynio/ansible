@@ -7,8 +7,10 @@ outline_postgres_user: outline
 outline_postgres_password: redacted
 outline_postgres_db: outline
 outline_url: https://wiki.leon.re
-outline_slack_key: redacted
-outline_slack_secret: redacted
+outline_google_client_id: redacted
+outline_google_client_secret: redacted
+outline_google_allowed_emails: redacted
+outline_google_team_id: Outline
 outline_aws_access_key_id: redacted
 outline_aws_secret_access_key: redacted
 outline_aws_region: fr-par
