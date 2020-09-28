@@ -1,0 +1,40 @@
+From 4c40f5020dda5ac1177a6ad502f72b3310e26a25 Mon Sep 17 00:00:00 2001
+From: Yohann Leon <yohann@leon.re>
+Date: Mon, 28 Sep 2020 17:24:18 +0200
+Subject: [PATCH] Patch spotify integration
+
+---
+ app/embeds/Spotify.js | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/app/embeds/Spotify.js b/app/embeds/Spotify.js
+index 31728309..4e4800e5 100644
+--- a/app/embeds/Spotify.js
++++ b/app/embeds/Spotify.js
+@@ -25,11 +25,21 @@ export default class Spotify extends React.Component<Props> {
+   render() {
+     const normalizedPath = this.pathname.replace(/^\/embed/, "/");
+ 
++    var height;
++
++    if (normalizedPath.includes("episode")) {
++      height = 232;
++    } else if (normalizedPath.includes("track")) {
++      height = 80;
++    } else {
++      height = 380;
++    }
++
+     return (
+       <Frame
+         {...this.props}
+-        width="300px"
+-        height="380px"
++        width="100%"
++        height={`${height}px`}
+         src={`https://open.spotify.com/embed${normalizedPath}`}
+         title="Spotify Embed"
+         allow="encrypted-media"
+-- 
+2.28.0
+

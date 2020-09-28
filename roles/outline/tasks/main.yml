@@ -61,7 +61,7 @@
   git:
     repo: https://github.com/outline/outline.git
     dest: '/srv/outline'
-    version: v0.47.1
+    version: v0.48.1
     force: yes
 
 - name: yarn install
@@ -84,13 +84,6 @@
     owner: '{{ outline_system_user }}'
     group: '{{ outline_system_group }}'
 
-- name: copy database config
-  copy:
-    src: 'database.json'
-    dest: '/srv/outline/server/config'
-    owner: '{{ outline_system_user }}'
-    group: '{{ outline_system_group }}'
-
 - name: copy outlaw patch
   copy:
     src: 'outlaw.patch'
@@ -98,10 +91,24 @@
     owner: '{{ outline_system_user }}'
     group: '{{ outline_system_group }}'
 
-- name: git apply patch
+- name: git apply outlaw patch
   become: yes
   become_user: '{{ outline_system_user }}'
   shell: git apply outlaw.patch
+  args:
+    chdir: '/srv/outline'
+
+- name: copy spotify patch
+  copy:
+    src: 'spotify.patch'
+    dest: '/srv/outline'
+    owner: '{{ outline_system_user }}'
+    group: '{{ outline_system_group }}'
+
+- name: git apply spotify patch
+  become: yes
+  become_user: '{{ outline_system_user }}'
+  shell: git apply spotify.patch
   args:
     chdir: '/srv/outline'
 
@@ -115,7 +122,7 @@
 - name: yarn sequelize:migrate
   become: yes
   become_user: '{{ outline_system_user }}'
-  shell: yarn sequelize:migrate
+  shell: yarn sequelize:migrate --env production-ssl-disabled
   args:
     chdir: '/srv/outline'
 
