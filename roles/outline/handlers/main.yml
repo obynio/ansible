@@ -1,12 +1,13 @@
 ---
 
+- name: systemctl daemon-reload
+  listen: service modified
+  service:
+    daemon_reload: true
+
 - name: outline restart
   listen: service modified
   service:
     name: outline
     state: restarted
 
-- name: systemctl daemon-reload
-  listen: service modified
-  service:
-    daemon_reload: true

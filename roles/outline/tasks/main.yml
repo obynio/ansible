@@ -125,6 +125,7 @@
   shell: yarn sequelize:migrate --env production-ssl-disabled
   args:
     chdir: '/srv/outline'
+  notify: service modified
 
 - name: enable and start outline service
   service:
