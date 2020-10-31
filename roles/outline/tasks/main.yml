@@ -61,7 +61,7 @@
   git:
     repo: https://github.com/outline/outline.git
     dest: '/srv/outline'
-    version: v0.48.1
+    version: v0.49.0
     force: yes
 
 - name: yarn install
@@ -95,20 +95,6 @@
   become: yes
   become_user: '{{ outline_system_user }}'
   shell: git apply outlaw.patch
-  args:
-    chdir: '/srv/outline'
-
-- name: copy spotify patch
-  copy:
-    src: 'spotify.patch'
-    dest: '/srv/outline'
-    owner: '{{ outline_system_user }}'
-    group: '{{ outline_system_group }}'
-
-- name: git apply spotify patch
-  become: yes
-  become_user: '{{ outline_system_user }}'
-  shell: git apply spotify.patch
   args:
     chdir: '/srv/outline'
 

@@ -1,18 +1,10 @@
 ---
 outline_system_group: outline
 outline_system_user: outline
-outline_secret_key: redacted
-outline_util_key: redacted
 outline_postgres_user: outline
-outline_postgres_password: redacted
 outline_postgres_db: outline
 outline_url: https://wiki.leon.re
-outline_google_client_id: redacted
-outline_google_client_secret: redacted
-outline_google_allowed_emails: redacted
 outline_google_team_id: Outline
-outline_aws_access_key_id: redacted
-outline_aws_secret_access_key: redacted
 outline_aws_region: fr-par
 outline_aws_s3_upload_bucket_url: https://s3.fr-par.scw.cloud
 outline_s3_upload_bucket_name: outline
