@@ -16,11 +16,11 @@ Environment="AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}"
 Environment="AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}"
 
 {% for folder in restic_folders %}
-ExecStart=/usr/bin/restic backup --verbose {{ folder.path }}
+ExecStart=/usr/bin/restic backup --verbose {{ folder.path }} {{ folder.options if folder.options is defined else '' }}
 {% endfor -%}
 
 {% for database in restic_databases %}
-ExecStart=/bin/sh -c "{{ database.dump_command }} | /usr/bin/restic backup --verbose --stdin --stdin-filename /var/lib/postgres/{{ database.name }}.sql"
+ExecStart=/bin/sh -c "{{ database.dump_command }} | /usr/bin/restic backup --verbose --stdin --stdin-filename /tmp/{{ database.name }}.sql {{ database.options if database.options is defined else '' }}"
 {% endfor -%}
 
 ExecStartPost=/usr/bin/restic forget --keep-within {{ restic_forget_keep_within }} --prune
