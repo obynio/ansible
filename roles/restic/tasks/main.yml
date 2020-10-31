@@ -1,0 +1,27 @@
+---
+- name: install restic package
+  package:
+    name: restic
+    state: present
+
+- name: add systemd service for restic
+  template:
+    src: restic.service
+    dest: /etc/systemd/system/restic.service
+    mode: '0644'
+  notify: systemd reload
+
+- name: add systemd timer for restic
+  template:
+    src: restic.timer
+    dest: /etc/systemd/system/restic.timer
+    mode: '0644'
+  notify: systemd reload
+
+- name: enable and start restic timer
+  systemd:
+    name: restic.timer
+    enabled: true
+    state: started
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

@@ -3,10 +3,9 @@ outline_system_group: outline
 outline_system_user: outline
 outline_postgres_user: outline
 outline_postgres_db: outline
-outline_url: https://wiki.leon.re
-outline_google_team_id: Outline
-outline_aws_region: fr-par
-outline_aws_s3_upload_bucket_url: https://s3.fr-par.scw.cloud
 outline_s3_upload_bucket_name: outline
+outline_aws_region: us-east-1
+outline_aws_s3_upload_bucket_url: https://s3.amazonaws.com
+outline_google_team_id: TeamID
 
 # vim: set et st=2 sts=2 sw=2 ts=2:

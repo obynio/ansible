@@ -1,0 +1,11 @@
+{{ ansible_managed | comment(decoration="# ") }}
+
+[Unit]
+Description=Restic
+Documentation=https://restic.net/
+
+[Timer]
+OnCalendar={{ restic_systemd_timer }}
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,6 @@
+---
+
+- name: systemctl daemon-reload
+  listen: systemd reload
+  service:
+    daemon_reload: true

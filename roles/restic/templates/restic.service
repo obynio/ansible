@@ -1,0 +1,26 @@
+{{ ansible_managed | comment(decoration="# ") }}
+
+[Unit]
+Description=Restic
+Documentation=https://restic.net/
+
+[Service]
+Type=oneshot
+User=root
+
+CPUQuota={{ 25 * ansible_processor_vcpus }}%
+
+Environment="RESTIC_REPOSITORY={{ restic_repository }}"
+Environment="RESTIC_PASSWORD={{ restic_password}}"
+Environment="AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}"
+Environment="AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}"
+
+{% for folder in restic_folders %}
+ExecStart=/usr/bin/restic backup --verbose {{ folder.path }}
+{% endfor -%}
+
+{% for database in restic_databases %}
+ExecStart=/bin/sh -c "{{ database.dump_command }} | /usr/bin/restic backup --verbose --stdin --stdin-filename /var/lib/postgres/{{ database.name }}.sql"
+{% endfor -%}
+
+ExecStartPost=/usr/bin/restic forget --keep-within {{ restic_forget_keep_within }} --prune
