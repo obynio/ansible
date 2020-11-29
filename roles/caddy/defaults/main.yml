@@ -1,4 +1,5 @@
 ---
+# config
 caddy_bin_path: /usr/bin/caddy
 caddy_log_path: /var/log/caddy
 caddy_config_path: /etc/caddy
@@ -8,5 +9,22 @@ caddy_user_home_dir: /var/lib/caddy
 caddy_user_id: 333
 caddy_group_id: 333
 caddy_env_vars: []
+
+# vhosts
+caddy_vhosts: []
+caddy_vhost_defaults:
+  tls: true
+  compress: true
+  proxy_host: null
+  proxy_transparent_disable: false
+  security_headers: false
+  file_server: false
+  basicauth: false
+  basicauth_path: '/'
+  root: null
+  php_fastcgi_enabled: null
+  php_fastcgi_path: null
+  responds: []
+  rewrites: []
 
 # vim: set et st=2 sts=2 sw=2 ts=2:

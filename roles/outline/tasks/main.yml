@@ -1,4 +1,27 @@
 ---
+- name: download nodejs
+  get_url:
+    url: https://deb.nodesource.com/setup_lts.x
+    dest: /tmp
+    mode: 755
+
+- name: setup nodejs
+  command: /tmp/setup_lts.x
+
+- name: install dependencies
+  apt:
+    state: latest
+    name:
+      - git
+      - postgresql
+      - redis
+      - nodejs
+
+- name: npm install yarn
+  npm:
+    name: yarn
+    global: yes
+
 - name: create outline system group
   group:
     name: '{{ outline_system_group }}'
@@ -12,18 +35,6 @@
     group: '{{ outline_system_group }}'
     createhome: false
 
-- name: install pacman packages
-  package:
-    name: git,postgresql,redis,nodejs,npm,yarn
-    state: present
-
-- name: initialize postgresql
-  shell: initdb --locale=en_US.UTF-8 -E UTF8 -D /var/lib/postgres/data
-  become: yes
-  become_user: 'postgres'
-  args:
-    creates: '/var/lib/postgres/data/pg_hba.conf'
-
 - name: enable and start postgresql service
   service:
     name: 'postgresql.service'
@@ -31,10 +42,14 @@
     enabled: yes
 
 - name: create database for outline
+  become: true
+  become_user: postgres
   postgresql_db:
     name: '{{ outline_postgres_db }}'
 
 - name: create user for outline
+  become: true
+  become_user: postgres
   postgresql_user:
     db: '{{ outline_postgres_db }}'
     name: '{{ outline_postgres_user }}'
@@ -61,7 +76,7 @@
   git:
     repo: https://github.com/outline/outline.git
     dest: '/srv/outline'
-    version: v0.49.0
+    version: v0.50.0
     force: yes
 
 - name: yarn install

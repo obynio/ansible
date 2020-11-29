@@ -1,8 +1,11 @@
 ---
-- name: install restic package
-  package:
+- name: install restic
+  apt:
+    state: latest
     name: restic
-    state: present
+
+- name: restic self-update
+  shell: restic self-update
 
 - name: add systemd service for restic
   template:

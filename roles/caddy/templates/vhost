@@ -1,0 +1,70 @@
+{{ ansible_managed | comment(decoration="# ") }}
+
+{{ vhost.hostname }} {
+  {{ 'encode zstd gzip' if vhost.compress else '' }}
+  log {
+    output file {{ caddy_log_path }}/{{ vhost.name }}.log {
+      # roll_disabled
+    }
+  }
+
+{% if vhost.tls %}
+  tls {
+    dns gandi {{ caddy_gandi_token }}
+  }
+{% endif %}
+
+{% if vhost.root %}
+  root {{ vhost.root }}
+{% endif -%}
+
+{% if vhost.file_server %}
+  file_server
+{% endif -%}
+
+{% for respond in vhost.responds %}
+  respond {{ respond }}
+{% endfor -%}
+
+{% for rewrite in vhost.rewrites %}
+  rewrite {{ rewrite }}
+{% endfor -%}
+
+{% if vhost.proxy_host %}
+  reverse_proxy {{ vhost.proxy_host }}{% if vhost.proxy_transparent_disable %} {
+    header_up -X-Forwarded-For
+    header_up -X-Forwarded-Proto
+    header_up -Host
+  } {% endif %}
+{% endif %}
+
+{% if vhost.php_fastcgi_enabled %}
+{% if vhost.php_fastcgi_path %}
+  php_fastcgi {{ vhost.php_fastcgi_path }}
+{% else %}
+  php_fastcgi unix//run/php/php-fpm-{{ vhost.name }}.sock
+{% endif %}
+{% endif %}
+
+{%- if vhost.security_headers %}
+  header {
+    # enable HSTS
+    Strict-Transport-Security max-age=31536000;
+
+    # disable clients from sniffing the media type
+    X-Content-Type-Options nosniff
+
+    # clickjacking protection
+    X-Frame-Options DENY
+
+    # keep referrer data off of HTTP connections
+    Referrer-Policy no-referrer-when-downgrade
+  }
+{% endif %}
+
+{%- if vhost.basicauth %}
+  basicauth {{ vhost.basicauth_path }} {
+    {{ vhost.basicauth_user }} {{ vhost.basicauth_password }}
+  }
+{% endif %}
+}

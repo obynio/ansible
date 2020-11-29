@@ -19,3 +19,7 @@ ansible-vault create vault.yml
 # Edit a vault file
 ansible-vault edit vault.yml
 ```
+## Credits
+
+* [whitecloud](https://github.com/whitecloud) for his [ansible-guidelines](https://github.com/whitecloud/ansible-styleguide)
+* [angristan](https://github.com/angristan) for his ansible playbooks

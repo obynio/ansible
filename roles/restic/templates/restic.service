@@ -10,10 +10,10 @@ User=root
 
 CPUQuota={{ 25 * ansible_processor_vcpus }}%
 
-Environment="RESTIC_PASSWORD={{ restic_password}}"
+Environment="RESTIC_PASSWORD={{ restic_password }}"
 Environment="RESTIC_REPOSITORY={{ restic_repository }}"
-Environment="AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id}}"
-Environment="AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key}}"
+Environment="AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id }}"
+Environment="AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key }}"
 
 {% for folder in restic_folders %}
 ExecStart=/usr/bin/restic backup --verbose {{ folder.path }} {{ folder.options if folder.options is defined else '' }}

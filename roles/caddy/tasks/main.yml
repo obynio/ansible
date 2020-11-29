@@ -34,6 +34,15 @@
     state: directory
     owner: '{{ caddy_user_name }}'
     group: '{{ caddy_group_name }}'
+    mode: 0755
+
+- name: create vhosts directory
+  file:
+    path: '{{ caddy_config_path }}/vhosts'
+    state: directory
+    owner: '{{ caddy_user_name }}'
+    group: '{{ caddy_group_name }}'
+    mode: 0755
 
 - name: create log directory
   file:
@@ -41,14 +50,15 @@
     state: directory
     owner: '{{ caddy_user_name }}'
     group: '{{ caddy_group_name }}'
+    mode: 0755
 
 - name: copy caddyfile
-  template:
+  copy:
     src: caddyfile
     dest: '{{ caddy_config_path }}/caddyfile'
     owner: '{{ caddy_user_name }}'
     group: '{{ caddy_group_name }}'
-    mode: '0644'
+    mode: 0644
   notify: caddy restart
 
 - name: enable and start caddy service
@@ -56,5 +66,12 @@
     name: 'caddy.service'
     state: started
     enabled: true
+
+- include_tasks: vhosts.yml
+  vars:
+    vhost: '{{ caddy_vhost_defaults | combine(vhost_) }}'
+  loop: '{{ caddy_vhosts }}'
+  loop_control:
+    loop_var: vhost_
 
 # vim: set et st=2 sts=2 sw=2 ts=2:

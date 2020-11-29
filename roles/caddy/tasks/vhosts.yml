@@ -1,0 +1,9 @@
+---
+- name: Add vhost
+  template:
+    src: 'vhost'
+    dest: '{{ caddy_config_path }}/vhosts/{{ vhost.name }}'
+    mode: 0644
+  notify: caddy reload
+
+# vim: set et st=2 sts=2 sw=2 ts=2:
