@@ -4,6 +4,7 @@
     url: https://caddyserver.com/api/download?os=linux&arch=amd64&p=github.com%2Fcaddy-dns%2Fgandi
     dest: '{{ caddy_bin_path }}'
     mode: '0755'
+    force: true
 
 - name: create caddy group
   group:
