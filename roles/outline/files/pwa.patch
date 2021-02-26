@@ -1,0 +1,27 @@
+From ed3f520ae46bf4a29422fb952403f37bddcabe23 Mon Sep 17 00:00:00 2001
+From: Yohann Leon <yohann@leon.re>
+Date: Fri, 26 Feb 2021 12:41:32 +0100
+Subject: [PATCH] fix: apply pwa patch
+
+---
+ shared/styles/globals.js | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/shared/styles/globals.js b/shared/styles/globals.js
+index 5fb10529..b6493ffe 100644
+--- a/shared/styles/globals.js
++++ b/shared/styles/globals.js
+@@ -46,9 +46,7 @@ export default createGlobalStyle`
+       top: 0;
+       left: 0;
+       right: 0;
+-      height: 1px;
+-      background: ${(props) => props.theme.titleBarDivider};
+-      z-index: ${(props) => props.theme.depths.titleBarDivider};
++      height: 0;
+     }
+   }
+ 
+-- 
+2.20.1
+
