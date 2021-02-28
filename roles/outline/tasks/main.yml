@@ -76,7 +76,7 @@
   git:
     repo: https://github.com/outline/outline.git
     dest: '/srv/outline'
-    version: v0.53.0
+    version: v1.53.0
     force: yes
 
 - name: yarn install
@@ -124,6 +124,20 @@
   become: yes
   become_user: '{{ outline_system_user }}'
   shell: git apply pwa.patch
+  args:
+    chdir: '/srv/outline'
+
+- name: copy teamlogo patch
+  copy:
+    src: 'teamlogo.patch'
+    dest: '/srv/outline'
+    owner: '{{ outline_system_user }}'
+    group: '{{ outline_system_group }}'
+
+- name: git apply teamlogo patch
+  become: yes
+  become_user: '{{ outline_system_user }}'
+  shell: git apply teamlogo.patch
   args:
     chdir: '/srv/outline'
 

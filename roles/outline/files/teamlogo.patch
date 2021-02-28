@@ -1,0 +1,24 @@
+From ea2c829aadaf86c650a4f666e1ec21b705f4fc86 Mon Sep 17 00:00:00 2001
+From: Yohann Leon <yohann@leon.re>
+Date: Sun, 28 Feb 2021 13:31:00 +0100
+Subject: [PATCH] fix: apply teamlogo patch
+
+---
+ app/components/TeamLogo.js | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/app/components/TeamLogo.js b/app/components/TeamLogo.js
+index 30a4c26c..5c8452f8 100644
+--- a/app/components/TeamLogo.js
++++ b/app/components/TeamLogo.js
+@@ -8,7 +8,6 @@ const TeamLogo = styled.img`
+     props.height ? `${props.height}px` : props.size || "38px"};
+   border-radius: 4px;
+   background: ${(props) => props.theme.background};
+-  border: 1px solid ${(props) => props.theme.divider};
+   overflow: hidden;
+   flex-shrink: 0;
+ `;
+-- 
+2.20.1
+
