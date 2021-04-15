@@ -21,7 +21,9 @@ PGSSLMODE=disable
 NODE_ENV=production
 
 ENABLE_UPDATES=true
-DEBUG=cache,presenters,events
+
+# Enforce debug mode in production
+# DEBUG=sql,cache,presenters,events,importer,exporter,emails,mailer
 
 # Third party signin credentials
 GOOGLE_CLIENT_ID={{ outline_google_client_id }}
@@ -31,7 +33,7 @@ GOOGLE_CLIENT_SECRET={{ outline_google_client_secret }}
 GOOGLE_ALLOWED_EMAILS={{ outline_google_allowed_emails }}
 
 # Default team id, can be changed afterwards
-GOOGLE_TEAM_ID={{ outline_google_team_id }}
+GOOGLE_DOMAIN={{ outline_google_domain }}
 
 # AWS credentials (optional in development)
 AWS_ACCESS_KEY_ID={{ outline_aws_access_key_id }}

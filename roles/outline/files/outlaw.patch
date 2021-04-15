@@ -1,68 +1,89 @@
-From b8f61c04a49cf6f52fe01ac3edb83a9d359c86f2 Mon Sep 17 00:00:00 2001
+From 78ce7aa0947e254ba60a89f1b99d50dd3e842287 Mon Sep 17 00:00:00 2001
 From: Yohann Leon <yohann@leon.re>
-Date: Fri, 25 Sep 2020 00:38:27 +0200
+Date: Thu, 15 Apr 2021 22:19:59 +0200
 Subject: [PATCH] fix: apply outlaw patch
 
 ---
  app/scenes/Login/Notices.js |  5 +++++
- server/auth/google.js       | 17 ++++++-----------
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ server/auth/google.js       | 14 ++++++--------
+ server/errors.js            |  6 ++++++
+ 3 files changed, 17 insertions(+), 8 deletions(-)
 
 diff --git a/app/scenes/Login/Notices.js b/app/scenes/Login/Notices.js
-index bef63de2..f97500a4 100644
+index d7be46d3..08830207 100644
 --- a/app/scenes/Login/Notices.js
 +++ b/app/scenes/Login/Notices.js
-@@ -51,6 +51,11 @@ export default function Notices({ notice }: Props) {
-           please contact a team admin.
+@@ -27,6 +27,11 @@ export default function Notices({ notice }: Props) {
+           an allowed team domain.
          </NoticeAlert>
        )}
 +      {notice === "denied" && (
 +        <NoticeAlert>
-+          You came to the wrong neighborhood
++          You shall not pass !
 +        </NoticeAlert>
 +      )}
-     </>
-   );
- }
+       {notice === "email-auth-required" && (
+         <NoticeAlert>
+           Your account uses email sign-in, please sign-in with email to
 diff --git a/server/auth/google.js b/server/auth/google.js
-index d7f12639..ea7a06a6 100644
+index 8a100cf5..2e5fd20f 100644
 --- a/server/auth/google.js
 +++ b/server/auth/google.js
-@@ -15,7 +15,7 @@ const client = new OAuth2Client(
-   process.env.GOOGLE_CLIENT_SECRET,
-   `${process.env.URL}/auth/google.callback`
- );
--const allowedDomainsEnv = process.env.GOOGLE_ALLOWED_DOMAINS;
-+const allowedEmailsEnv = process.env.GOOGLE_ALLOWED_EMAILS;
+@@ -8,6 +8,7 @@ import env from "../env";
+ import {
+   GoogleWorkspaceRequiredError,
+   GoogleWorkspaceInvalidError,
++  GoogleDenied,
+ } from "../errors";
+ import auth from "../middlewares/authentication";
+ import passportMiddleware from "../middlewares/passport";
+@@ -18,7 +19,6 @@ const router = new Router();
+ const providerName = "google";
+ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+-const allowedDomains = getAllowedDomains();
  
- // start the oauth process and redirect user to Google
- router.get("google", async (ctx) => {
-@@ -42,20 +42,15 @@ router.get("google.callback", auth({ required: false }), async (ctx) => {
-     url: "https://www.googleapis.com/oauth2/v1/userinfo",
-   });
+ const scopes = [
+   "https://www.googleapis.com/auth/userinfo.profile",
+@@ -44,16 +44,14 @@ if (GOOGLE_CLIENT_ID) {
+       },
+       async function (req, accessToken, refreshToken, profile, done) {
+         try {
+-          const domain = profile._json.hd;
++          const allowedEmailsEnv = process.env.GOOGLE_ALLOWED_EMAILS;
++          const allowedEmails = allowedEmailsEnv && allowedEmailsEnv.split(',');
  
--  if (!profile.data.hd) {
--    ctx.redirect("/?notice=google-hd");
--    return;
--  }
-+  const allowedEmails = allowedEmailsEnv && allowedEmailsEnv.split(',');
+-          if (!domain) {
+-            throw new GoogleWorkspaceRequiredError();
+-          }
+-
+-          if (allowedDomains.length && !allowedDomains.includes(domain)) {
+-            throw new GoogleWorkspaceInvalidError();
++	  if (allowedEmails && !allowedEmails.includes(profile.email)) {
++            throw new GoogleDenied();
+           }
  
--  // allow all domains by default if the env is not set
--  const allowedDomains = allowedDomainsEnv && allowedDomainsEnv.split(",");
--  if (allowedDomains && !allowedDomains.includes(profile.data.hd)) {
--    ctx.redirect("/?notice=hd-not-allowed");
-+  if (allowedEmails && !allowedEmails.includes(profile.data.email)) {
-+    ctx.redirect('/?notice=denied');
-     return;
-   }
++          const domain = process.env.GOOGLE_DOMAIN;
+           const subdomain = domain.split(".")[0];
+           const teamName = capitalize(subdomain);
  
--  const googleId = profile.data.hd;
--  const hostname = profile.data.hd.split(".")[0];
-+  const googleId = process.env.GOOGLE_TEAM_ID;
-+  const hostname = googleId.split('.')[0];
-   const teamName = capitalize(hostname);
+diff --git a/server/errors.js b/server/errors.js
+index 7aab2f8d..b266532f 100644
+--- a/server/errors.js
++++ b/server/errors.js
+@@ -94,6 +94,12 @@ export function GoogleWorkspaceInvalidError(
+   return httpErrors(400, message, { id: "hd_not_allowed" });
+ }
  
-   // attempt to get logo from Clearbit API. If one doesn't exist then
++export function GoogleDenied(
++  message: string = "You came to the wrong neighborhood"
++) {
++  return httpErrors(400, message, { id: "denied" });
++}
++
+ export function AuthenticationProviderDisabledError(
+   message: string = "Authentication method has been disabled by an admin",
+   redirectUrl: string = env.URL
 -- 
-2.28.0
+2.20.1
 
