@@ -76,7 +76,7 @@
   git:
     repo: https://github.com/outline/outline.git
     dest: '/srv/outline'
-    version: v0.54.0
+    version: v0.55.0
     force: yes
 
 - name: yarn install
