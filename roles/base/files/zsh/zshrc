@@ -41,4 +41,4 @@ fi
 export AWS_SDK_LOAD_CONFIG=1
 
 # Overwrite default MacOS history location
-export HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
+export HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
