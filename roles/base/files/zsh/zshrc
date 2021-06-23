@@ -33,7 +33,7 @@ fi
 
 # Set Ruby PATH
 # Where to search for ruby binaries and packages
-if (( $+commands[luarocks] )); then
+if (( $+commands[rbenv] )); then
     eval "$(rbenv init -)"
 fi
 
