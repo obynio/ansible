@@ -27,21 +27,14 @@
       - git
       - htop
       - curl
-      - wget
       - sudo
       - strace
       - tree
       - zip
       - unzip
-      - python-pip
-      - python-psycopg2
-      - apt-utils
       - dnsutils
-      - tcpdump
       - traceroute
       - mtr
-      - nmap
-      - lsof
 
 - name: create group shepard
   group:
