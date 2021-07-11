@@ -1,0 +1,22 @@
+---
+
+- name: systemctl daemon-reload
+  listen: service modified
+  service:
+    daemon_reload: true
+
+- name: rtorrent restart
+  listen: service modified
+  service:
+    name: rtorrent
+    state: restarted
+    enabled: true
+
+- name: flood restart
+  listen: service modified
+  service:
+    name: flood
+    state: restarted
+    enabled: true
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

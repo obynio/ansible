@@ -1,0 +1,38 @@
+---
+# config
+rtorrent_user_name: rtorrent
+rtorrent_group_name: rtorrent
+rtorrent_user_home: '/var/lib/rtorrent'
+rtorrent_user_id: 411
+rtorrent_group_id: 411
+
+rtorrent_min_peers: 40
+rtorrent_max_peers: 100
+rtorrent_min_peers_seed: 10
+rtorrent_max_peers_seed: 50
+rtorrent_max_uploads: 15
+rtorrent_download_rate: 0
+rtorrent_upload_rate: 0
+
+rtorrent_schedules:
+  - 'monitor_diskspace, 15, 60, ((close_low_diskspace, 1000M))'
+
+rtorrent_port_range_start: 46157
+rtorrent_port_range_end: 47169
+rtorrent_port_range: '{{ rtorrent_port_range_start }}-{{ rtorrent_port_range_end }}'
+rtorrent_port_random: yes
+
+rtorrent_check_hash: no
+rtorrent_use_udp_trackers: yes
+rtorrent_encryption: 'allow_incoming,try_outgoing,enable_retry'
+rtorrent_dht: auto
+rtorrent_dht_port: 6881
+rtorrent_peer_exchange: yes
+
+rtorrent_directory_downloads: '/var/lib/rtorrent/downloads'
+rtorrent_directory_session: '/var/lib/rtorrent/session'
+rtorrent_socket: '/var/lib/rtorrent/rtorrent.sock'
+rtorrent_lock: '/var/lib/rtorrent/rtorrent.lock'
+rtorrent_host: '127.0.0.1'
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

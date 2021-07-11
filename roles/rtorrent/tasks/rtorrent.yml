@@ -1,0 +1,50 @@
+---
+- name: install rtorrent
+  apt:
+    state: latest
+    name:
+      - rtorrent
+      - screen
+
+- name: create torrent group
+  group:
+    name: '{{ rtorrent_group_name }}'
+    gid: '{{ rtorrent_group_id }}'
+    system: true
+
+- name: create torrent user
+  user:
+    name: '{{ rtorrent_user_name }}'
+    uid: '{{ rtorrent_user_id | int }}'
+    group: '{{ rtorrent_group_id | int }}'
+    home: '{{ rtorrent_user_home }}'
+    create_home: true
+    shell: '/usr/sbin/nologin'
+    system: true
+
+- name: create base directories for rtorrent
+  file:
+    path: '{{ item }}'
+    state: directory
+    owner: "{{ rtorrent_user_name }}"
+    group: "{{ rtorrent_group_name }}"
+  with_items: 
+    - '{{ rtorrent_directory_downloads }}'
+    - '{{ rtorrent_directory_session }}'
+
+- name: configure rtorrent
+  template:
+    src: rtorrent.rc.j2
+    dest: "{{ rtorrent_user_home }}/.rtorrent.rc"
+    owner: "{{ rtorrent_user_name }}"
+    group: "{{ rtorrent_group_name }}"
+    mode: 0644 
+
+- name: create rtorrent systemd service
+  template:
+    src: rtorrent.service.j2
+    dest: /etc/systemd/system/rtorrent.service
+    mode: 0644
+  notify: service modified
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

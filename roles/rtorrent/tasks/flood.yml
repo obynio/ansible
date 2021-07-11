@@ -1,0 +1,30 @@
+---
+- name: download nodejs
+  get_url:
+    url: https://deb.nodesource.com/setup_lts.x
+    dest: /tmp
+    mode: 755
+
+- name: setup nodejs
+  command: /tmp/setup_lts.x
+
+- name: install nodejs
+  apt:
+    state: latest
+    name: 
+      - nodejs
+      - mediainfo
+
+- name: npm install flood
+  npm:
+    name: flood
+    global: yes
+
+- name: create flood systemd service
+  template:
+    src: flood.service.j2
+    dest: /etc/systemd/system/flood.service
+    mode: 0644
+  notify: service modified
+
+# vim: set et st=2 sts=2 sw=2 ts=2:
