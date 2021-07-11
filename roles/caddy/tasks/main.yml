@@ -17,7 +17,7 @@
     name: '{{ caddy_user_name }}'
     uid: '{{ caddy_user_id | int }}'
     group: '{{ caddy_group_id | int }}'
-    home: '{{ caddy_user_home_dir }}'
+    home: '{{ caddy_user_home }}'
     create_home: true
     shell: '/usr/sbin/nologin'
     system: true

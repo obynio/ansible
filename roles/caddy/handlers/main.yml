@@ -1,9 +1,9 @@
 ---
 
-- name: caddy reload
+- name: systemctl daemon-reload
+  listen: service modified
   service:
-    name: caddy
-    state: reloaded
+    daemon_reload: true
 
 - name: caddy restart
   listen: service modified
@@ -11,7 +11,9 @@
     name: caddy
     state: restarted
 
-- name: systemctl daemon-reload
-  listen: service modified
+- name: caddy reload
   service:
-    daemon_reload: true
+    name: caddy
+    state: reloaded
+
+# vim: set et st=2 sts=2 sw=2 ts=2:
