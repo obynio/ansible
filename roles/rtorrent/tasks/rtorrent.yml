@@ -2,9 +2,7 @@
 - name: install rtorrent
   apt:
     state: latest
-    name:
-      - rtorrent
-      - screen
+    name: rtorrent
 
 - name: create torrent group
   group:
