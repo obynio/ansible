@@ -1,11 +1,35 @@
 ---
-outline_system_group: outline
-outline_system_user: outline
-outline_postgres_user: outline
-outline_postgres_db: outline
-outline_google_domain: outline
-outline_s3_upload_bucket_name: outline
-outline_aws_region: us-east-1
-outline_aws_s3_upload_bucket_url: https://s3.amazonaws.com
+# Users and groups created for SystemD
+outline_system_group: 'outline'
+outline_system_user: 'outline'
+
+# Add your AWS bucket configuration for media upload
+outline_aws_region: 'xx-xxxx-x'
+outline_aws_access_key_id: 'get_a_key_from_aws'
+outline_aws_secret_access_key: 'get_the_secret_of_above_key'
+outline_aws_s3_upload_bucket_url: 'http://s3:4569'
+outline_aws_s3_upload_bucket_name: 'bucket_name_here'
+
+# Pretty obvious
+outline_redis_url: 'redis://localhost:6379'
+
+# URL should point to the fully qualified, publicly accessible URL
+outline_url: 'https://wiki.snowden.com'
+outline_port: '3000'
+
+# For production point these at your databases
+outline_postgres_db: 'postgres_db'
+outline_postgres_user: 'postgres_user'
+outline_postgres_password: 'postgres_password'
+
+# Generate a hex-encoded 32-byte random key. You should use `openssl rand -hex 32`
+outline_secret_key: 'generate_a_new_key'
+outline_util_key: 'generate_a_new_key'
+
+# To configure Google auth, you'll need to create an OAuth Client ID in GCP
+outline_google_client_id: 'get_a_client_id_from_gcp'
+outline_google_client_secret: 'get_the_client_secret_of_above_id'
+outline_google_allowed_emails: 'edward@snowden.com'
+outline_google_domain: 'outline'
 
 # vim: set et st=2 sts=2 sw=2 ts=2:

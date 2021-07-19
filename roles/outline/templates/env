@@ -9,10 +9,10 @@ SECRET_KEY={{ outline_secret_key }}
 UTILS_SECRET={{ outline_util_key }}
 
 DATABASE_URL=postgres://{{ outline_postgres_user }}:{{ outline_postgres_password }}@localhost:5432/{{ outline_postgres_db }}?sslmode=disable
-REDIS_URL=redis://localhost:6379
+REDIS_URL={{ outline_redis_url }}
 
 URL={{ outline_url }}
-PORT=3000
+PORT={{ outline_port }}
 
 # Enforce https in production, default is true.
 # Set to false if  your SSL is terminated at a loadbalancer
@@ -40,7 +40,7 @@ AWS_ACCESS_KEY_ID={{ outline_aws_access_key_id }}
 AWS_SECRET_ACCESS_KEY={{ outline_aws_secret_access_key }}
 AWS_REGION={{ outline_aws_region }}
 AWS_S3_UPLOAD_BUCKET_URL={{ outline_aws_s3_upload_bucket_url }}
-AWS_S3_UPLOAD_BUCKET_NAME={{ outline_s3_upload_bucket_name }}
+AWS_S3_UPLOAD_BUCKET_NAME={{ outline_aws_s3_upload_bucket_name }}
 AWS_S3_UPLOAD_MAX_SIZE=26214400
 AWS_S3_FORCE_PATH_STYLE=true
 # Uploaded s3 objects permission level, default is private
