@@ -7,7 +7,7 @@ User={{ rtorrent_user_name }}
 Group={{ rtorrent_group_name }}
 Type=simple
 KillMode=process
-ExecStart=/usr/bin/env flood --host {{ rtorrent_host }} --rtsocket {{ rtorrent_socket }}
+ExecStart=/usr/bin/env flood --host {{ rtorrent_ui_host }} --port {{ rtorrent_ui_port }} --rtsocket {{ rtorrent_socket }}
 Restart=on-failure
 RestartSec=3
 

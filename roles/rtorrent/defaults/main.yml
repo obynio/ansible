@@ -33,6 +33,7 @@ rtorrent_directory_downloads: '/var/lib/rtorrent/downloads'
 rtorrent_directory_session: '/var/lib/rtorrent/session'
 rtorrent_socket: '/var/lib/rtorrent/rtorrent.sock'
 rtorrent_lock: '/var/lib/rtorrent/rtorrent.lock'
-rtorrent_host: '127.0.0.1'
+rtorrent_ui_host: '127.0.0.1'
+rtorrent_ui_port: 3000
 
 # vim: set et st=2 sts=2 sw=2 ts=2:
