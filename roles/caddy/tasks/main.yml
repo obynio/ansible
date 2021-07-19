@@ -1,5 +1,14 @@
 ---
-- name: download caddy
+- name: download caddy for arm
+  when: ansible_architecture == 'aarch64'
+  get_url:
+    url: https://caddyserver.com/api/download?os=linux&arch=arm64&p=github.com%2Fcaddy-dns%2Fgandi
+    dest: '{{ caddy_bin_path }}'
+    mode: '0755'
+    force: true
+
+- name: download caddy for x86
+  when: ansible_architecture == 'x86_64'
   get_url:
     url: https://caddyserver.com/api/download?os=linux&arch=amd64&p=github.com%2Fcaddy-dns%2Fgandi
     dest: '{{ caddy_bin_path }}'
