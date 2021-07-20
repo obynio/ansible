@@ -1,10 +1,10 @@
 ---
-restic_repository_name: restic
-restic_forget_keep_within: 30d
+restic_repository_name: 'restic'
+restic_forget: false
+restic_forget_keep_within: '30d'
 restic_systemd_timer: '*-*-* 03:00:00'
 restic_folders:
   - {path: '/etc', options: '--tag config'}
-  - {path: '/etc/ansible/host_vars', options: '--tag config'}
 restic_databases:
   - {name: 'outline', dump_command: 'sudo -Hiu postgres pg_dump -Fc outline', options: '--tag postgresql'}
 
