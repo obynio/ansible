@@ -1,19 +1,19 @@
-From 4e47995b4fbdb352f7349092c47c49791681deee Mon Sep 17 00:00:00 2001
+From 59e85824ceef70555d33ca1fadedfc84f451fe29 Mon Sep 17 00:00:00 2001
 From: Yohann Leon <yohann@leon.re>
-Date: Fri, 10 Sep 2021 18:51:12 +0200
+Date: Sun, 27 Feb 2022 15:21:16 +0100
 Subject: [PATCH] fix: apply outlaw patch
 
 ---
- app/scenes/Login/Notices.js            |  5 +++++
- server/errors.js                       |  6 ++++++
- server/routes/auth/providers/google.js | 14 ++++++--------
- 3 files changed, 17 insertions(+), 8 deletions(-)
+ app/scenes/Login/Notices.tsx           |  5 +++++
+ server/errors.ts                       |  8 ++++++++
+ server/routes/auth/providers/google.ts | 14 ++++++--------
+ 3 files changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/app/scenes/Login/Notices.js b/app/scenes/Login/Notices.js
-index 34c91073..6538d11c 100644
---- a/app/scenes/Login/Notices.js
-+++ b/app/scenes/Login/Notices.js
-@@ -33,6 +33,11 @@ export default function Notices() {
+diff --git a/app/scenes/Login/Notices.tsx b/app/scenes/Login/Notices.tsx
+index 91cead7c..b485e59e 100644
+--- a/app/scenes/Login/Notices.tsx
++++ b/app/scenes/Login/Notices.tsx
+@@ -32,6 +32,11 @@ export default function Notices() {
            We could not read the user info supplied by your identity provider.
          </NoticeAlert>
        )}
@@ -25,65 +25,67 @@ index 34c91073..6538d11c 100644
        {notice === "email-auth-required" && (
          <NoticeAlert>
            Your account uses email sign-in, please sign-in with email to
-diff --git a/server/errors.js b/server/errors.js
-index ba28608e..1ef770ee 100644
---- a/server/errors.js
-+++ b/server/errors.js
-@@ -100,6 +100,12 @@ export function GoogleWorkspaceInvalidError(
-   return httpErrors(400, message, { id: "hd_not_allowed" });
+diff --git a/server/errors.ts b/server/errors.ts
+index e3e3c430..b436930e 100644
+--- a/server/errors.ts
++++ b/server/errors.ts
+@@ -126,6 +126,14 @@ export function GoogleWorkspaceInvalidError(
+   });
  }
  
 +export function GoogleDenied(
-+  message: string = "You shall not pass !"
++  message = "You shall not pass !"
 +) {
-+  return httpErrors(400, message, { id: "denied" });
++  return httpErrors(400, message, {
++    id: "denied",
++  });
 +}
 +
  export function OIDCMalformedUserInfoError(
-   message: string = "User profile information malformed"
+   message = "User profile information malformed"
  ) {
-diff --git a/server/routes/auth/providers/google.js b/server/routes/auth/providers/google.js
-index 885c19c7..dccee04e 100644
---- a/server/routes/auth/providers/google.js
-+++ b/server/routes/auth/providers/google.js
-@@ -8,6 +8,7 @@ import env from "../../../env";
+diff --git a/server/routes/auth/providers/google.ts b/server/routes/auth/providers/google.ts
+index e5d34cb5..dee27104 100644
+--- a/server/routes/auth/providers/google.ts
++++ b/server/routes/auth/providers/google.ts
+@@ -8,6 +8,7 @@ import env from "@server/env";
  import {
    GoogleWorkspaceRequiredError,
    GoogleWorkspaceInvalidError,
 +  GoogleDenied,
- } from "../../../errors";
- import passportMiddleware from "../../../middlewares/passport";
- import { getAllowedDomains } from "../../../utils/authentication";
+ } from "@server/errors";
+ import passportMiddleware from "@server/middlewares/passport";
+ import { getAllowedDomains } from "@server/utils/authentication";
 @@ -17,7 +18,6 @@ const router = new Router();
  const providerName = "google";
  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
  const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 -const allowedDomains = getAllowedDomains();
- 
  const scopes = [
    "https://www.googleapis.com/auth/userinfo.profile",
+   "https://www.googleapis.com/auth/userinfo.email",
 @@ -42,16 +42,14 @@ if (GOOGLE_CLIENT_ID) {
-       },
+       // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'req' implicitly has an 'any' type.
        async function (req, accessToken, refreshToken, profile, done) {
          try {
 -          const domain = profile._json.hd;
-+	  const allowedEmailsEnv = process.env.GOOGLE_ALLOWED_EMAILS;
-+	  const allowedEmails = allowedEmailsEnv && allowedEmailsEnv.split(',');
++          const allowedEmailsEnv = process.env.GOOGLE_ALLOWED_EMAILS; 
++          const allowedEmails = allowedEmailsEnv && allowedEmailsEnv.split(','); 
  
 -          if (!domain) {
--            throw new GoogleWorkspaceRequiredError();
+-            throw GoogleWorkspaceRequiredError();
 -          }
 -
 -          if (allowedDomains.length && !allowedDomains.includes(domain)) {
--            throw new GoogleWorkspaceInvalidError();
+-            throw GoogleWorkspaceInvalidError();
 +          if (allowedEmails && !allowedEmails.includes(profile.email)) {
 +	    throw new GoogleDenied();
            }
  
-+	  const domain = process.env.GOOGLE_DOMAIN;
++          const domain = process.env.GOOGLE_DOMAIN;
            const subdomain = domain.split(".")[0];
            const teamName = capitalize(subdomain);
- 
+           const result = await accountProvisioner({
 -- 
 2.20.1
 
