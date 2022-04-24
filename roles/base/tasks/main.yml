@@ -24,12 +24,6 @@
     id: 93C4A3FD7BB9C367
   notify: apt update
 
-- name: add ansible repository for buster
-  apt_repository:
-    repo: deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main
-    state: present
-    filename: ansible
-
 - name: install basic packages
   apt:
     state: latest
