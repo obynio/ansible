@@ -29,6 +29,10 @@
   with_items: 
     - '{{ rtorrent_directory_downloads }}'
     - '{{ rtorrent_directory_session }}'
+    - '{{ rtorrent_directory_logs }}'
+    - '{{ rtorrent_directory_watch }}'
+    - '{{ rtorrent_directory_watch }}/start'
+    - '{{ rtorrent_directory_watch }}/load'
 
 - name: configure rtorrent
   template:

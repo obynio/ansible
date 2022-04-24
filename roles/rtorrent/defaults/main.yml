@@ -16,6 +16,8 @@ rtorrent_upload_rate: 0
 
 rtorrent_schedules:
   - 'monitor_diskspace, 15, 60, ((close_low_diskspace, 1000M))'
+  - 'watch_start, 11, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))'
+  - 'watch_load, 12, 10, ((load.normal, (cat, (cfg.watch), "load/*.torrent")))'
 
 rtorrent_port_range_start: 46157
 rtorrent_port_range_end: 47169
@@ -31,6 +33,8 @@ rtorrent_peer_exchange: yes
 
 rtorrent_directory_downloads: '/var/lib/rtorrent/downloads'
 rtorrent_directory_session: '/var/lib/rtorrent/session'
+rtorrent_directory_watch: '/var/lib/rtorrent/watch'
+rtorrent_directory_logs: '/var/lib/rtorrent/logs'
 rtorrent_socket: '/var/lib/rtorrent/rtorrent.sock'
 rtorrent_lock: '/var/lib/rtorrent/rtorrent.lock'
 rtorrent_ui_host: '127.0.0.1'

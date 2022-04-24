@@ -3,6 +3,19 @@
 # Set encoding to UTF-8
 encoding_list = UTF-8
 
+# Default download directory (cfg.download)
+method.insert = cfg.download, private|const|string, {{ rtorrent_directory_downloads }}
+
+# Log directory (cfg.logs)
+method.insert = cfg.logs,     private|const|string, {{ rtorrent_directory_logs }}
+method.insert = cfg.logfile,  private|const|string, (cat,(cfg.logs),"rtorrent-",(system.time),".log")
+
+# Torrent session directory (cfg.session)
+method.insert = cfg.session,  private|const|string, {{ rtorrent_directory_session }}
+
+# Watch (drop to add) directories (cfg.watch)
+method.insert = cfg.watch,    private|const|string, {{ rtorrent_directory_watch }}
+
 # Maximum and minimum number of peers to connect to per torrent.
 throttle.min_peers.normal.set = {{ rtorrent_min_peers }}
 throttle.max_peers.normal.set = {{ rtorrent_max_peers }}
@@ -18,11 +31,10 @@ throttle.max_uploads.set = {{ rtorrent_max_uploads }}
 throttle.global_down.max_rate.set_kb = {{ rtorrent_download_rate }}
 throttle.global_up.max_rate.set_kb = {{ rtorrent_upload_rate }}
 
-# Default directory to save the downloaded torrents.
-directory.default.set = {{ rtorrent_directory_downloads }}
-
-# Default session directory.
-session.path.set = {{ rtorrent_directory_session }}
+# Basic operational settings
+session.path.set = (cat, (cfg.session))
+directory.default.set = (cat, (cfg.download))
+log.execute = (cat, (cfg.logs), "/execute.log")
 
 # Watch a directory for new torrents, and stop those that have been deleted.
 {% for schedule in rtorrent_schedules %}
