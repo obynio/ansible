@@ -1,13 +1,13 @@
-From 59e85824ceef70555d33ca1fadedfc84f451fe29 Mon Sep 17 00:00:00 2001
+From 3ac638f35acdd13e74959ab967cac6f9fe37d029 Mon Sep 17 00:00:00 2001
 From: Yohann Leon <yohann@leon.re>
-Date: Sun, 27 Feb 2022 15:21:16 +0100
+Date: Sun, 24 Apr 2022 04:05:17 +0200
 Subject: [PATCH] fix: apply outlaw patch
 
 ---
  app/scenes/Login/Notices.tsx           |  5 +++++
  server/errors.ts                       |  8 ++++++++
- server/routes/auth/providers/google.ts | 14 ++++++--------
- 3 files changed, 19 insertions(+), 8 deletions(-)
+ server/routes/auth/providers/google.ts | 13 ++++++-------
+ 3 files changed, 19 insertions(+), 7 deletions(-)
 
 diff --git a/app/scenes/Login/Notices.tsx b/app/scenes/Login/Notices.tsx
 index 91cead7c..b485e59e 100644
@@ -26,10 +26,10 @@ index 91cead7c..b485e59e 100644
          <NoticeAlert>
            Your account uses email sign-in, please sign-in with email to
 diff --git a/server/errors.ts b/server/errors.ts
-index e3e3c430..b436930e 100644
+index 338efddc..2a127fb9 100644
 --- a/server/errors.ts
 +++ b/server/errors.ts
-@@ -126,6 +126,14 @@ export function GoogleWorkspaceInvalidError(
+@@ -130,6 +130,14 @@ export function GoogleWorkspaceInvalidError(
    });
  }
  
@@ -45,7 +45,7 @@ index e3e3c430..b436930e 100644
    message = "User profile information malformed"
  ) {
 diff --git a/server/routes/auth/providers/google.ts b/server/routes/auth/providers/google.ts
-index e5d34cb5..dee27104 100644
+index 91c157fb..ffef4c3a 100644
 --- a/server/routes/auth/providers/google.ts
 +++ b/server/routes/auth/providers/google.ts
 @@ -8,6 +8,7 @@ import env from "@server/env";
@@ -55,31 +55,23 @@ index e5d34cb5..dee27104 100644
 +  GoogleDenied,
  } from "@server/errors";
  import passportMiddleware from "@server/middlewares/passport";
- import { getAllowedDomains } from "@server/utils/authentication";
-@@ -17,7 +18,6 @@ const router = new Router();
- const providerName = "google";
- const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
- const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
--const allowedDomains = getAllowedDomains();
- const scopes = [
-   "https://www.googleapis.com/auth/userinfo.profile",
-   "https://www.googleapis.com/auth/userinfo.email",
-@@ -42,16 +42,14 @@ if (GOOGLE_CLIENT_ID) {
+ import { isDomainAllowed } from "@server/utils/authentication";
+@@ -41,16 +42,14 @@ if (GOOGLE_CLIENT_ID) {
        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'req' implicitly has an 'any' type.
        async function (req, accessToken, refreshToken, profile, done) {
          try {
 -          const domain = profile._json.hd;
-+          const allowedEmailsEnv = process.env.GOOGLE_ALLOWED_EMAILS; 
-+          const allowedEmails = allowedEmailsEnv && allowedEmailsEnv.split(','); 
++	  const allowedEmailsEnv = process.env.GOOGLE_ALLOWED_EMAILS;
++          const allowedEmails = allowedEmailsEnv && allowedEmailsEnv.split(',');
  
 -          if (!domain) {
 -            throw GoogleWorkspaceRequiredError();
 -          }
 -
--          if (allowedDomains.length && !allowedDomains.includes(domain)) {
+-          if (!isDomainAllowed(domain)) {
 -            throw GoogleWorkspaceInvalidError();
 +          if (allowedEmails && !allowedEmails.includes(profile.email)) {
-+	    throw new GoogleDenied();
++            throw new GoogleDenied();
            }
  
 +          const domain = process.env.GOOGLE_DOMAIN;

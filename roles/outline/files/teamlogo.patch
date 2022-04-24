@@ -1,6 +1,6 @@
-From f45eb06b0058b865db78028fb7f04b2943222527 Mon Sep 17 00:00:00 2001
+From 3b61a51ce5cf18cfe515f364d2f32e9faef3e42c Mon Sep 17 00:00:00 2001
 From: Yohann Leon <yohann@leon.re>
-Date: Sun, 27 Feb 2022 15:26:41 +0100
+Date: Sun, 24 Apr 2022 04:13:13 +0200
 Subject: [PATCH] fix: apply teamlogo patch
 
 ---
@@ -8,13 +8,13 @@ Subject: [PATCH] fix: apply teamlogo patch
  1 file changed, 1 deletion(-)
 
 diff --git a/app/components/TeamLogo.ts b/app/components/TeamLogo.ts
-index 2eb5d144..af0f08b1 100644
+index 4df19eaf..30807027 100644
 --- a/app/components/TeamLogo.ts
 +++ b/app/components/TeamLogo.ts
-@@ -7,7 +7,6 @@ const TeamLogo = styled.img<{ width?: number; height?: number; size?: string }>`
+@@ -6,7 +6,6 @@ const TeamLogo = styled.img<{ width?: number; height?: number; size?: string }>`
+   height: ${(props) =>
      props.height ? `${props.height}px` : props.size || "38px"};
    border-radius: 4px;
-   background: ${(props) => props.theme.background};
 -  border: 1px solid ${(props) => props.theme.divider};
    overflow: hidden;
    flex-shrink: 0;
