@@ -1,0 +1,10 @@
+komga:
+  remember-me:
+    key: {{ komga_cookie_key }}
+    validity: {{ komga_cookie_validity }}
+  session-timeout: {{ komga_session_timeout }}
+  database:
+    file: ${user.home}/database.sqlite
+  native-webp: true
+server:
+  port: {{ komga_ui_port }}

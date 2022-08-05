@@ -1,0 +1,15 @@
+---
+
+- name: systemctl daemon-reload
+  listen: service modified
+  service:
+    daemon_reload: true
+
+- name: systemctl restart komga
+  listen: service modified
+  service:
+    name: komga
+    state: restarted
+    enabled: true
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

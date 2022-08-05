@@ -1,0 +1,45 @@
+---
+- name: create torrent group
+  group:
+    name: '{{ komga_group_name }}'
+    gid: '{{ komga_group_id }}'
+    system: true
+
+- name: create torrent user
+  user:
+    name: '{{ komga_user_name }}'
+    uid: '{{ komga_user_id | int }}'
+    group: '{{ komga_group_id | int }}'
+    home: '{{ komga_user_home }}'
+    create_home: true
+    shell: '/usr/sbin/nologin'
+    system: true
+
+- name: download komga
+  get_url:
+    url: 'https://github.com/gotson/komga/releases/download/v{{ komga_version }}/komga-{{ komga_version }}.jar'
+    dest: '{{ komga_user_home }}'
+    mode: 0755
+- name: change permissions
+  file:
+    path: "{{ komga_user_home }}/komga-{{ komga_version}}.jar"
+    owner: komga
+    group: komga
+    mode: 0755
+
+- name: create komga configuration
+  template:
+    src: application.yml.j2
+    dest: '{{ komga_user_home}}/application.yml'
+    owner: komga
+    group: komga
+    mode: 0644
+
+- name: create komga systemd service
+  template:
+    src: komga.service.j2
+    dest: /etc/systemd/system/komga.service
+    mode: 0644
+  notify: service modified
+
+# vim: set et st=2 sts=2 sw=2 ts=2:
