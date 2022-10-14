@@ -1,5 +1,6 @@
 ---
 - import_tasks: rtorrent.yml
 - import_tasks: flood.yml
+- import_tasks: tvnamer.yml
 
 # vim: set et st=2 sts=2 sw=2 ts=2:
