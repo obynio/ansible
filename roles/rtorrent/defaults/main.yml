@@ -1,13 +1,11 @@
 ---
 # config
 rtorrent_user_name: 'rtorrent'
-rtorrent_group_name: 'rtorrent'
-rtorrent_user_home: '/var/lib/rtorrent'
+rtorrent_group_name: 'media'
 rtorrent_user_id: 411
-rtorrent_group_id: 411
-rtorrent_human_user_name: 'shepard'
-rtorrent_human_group_name: 'shepard'
-rtorrent_human_user_home: '/home/shepard'
+rtorrent_group_id: 404
+rtorrent_user_home: '/var/lib/rtorrent'
+rtorrent_mnamer_home: '/var/lib/rtorrent'
 
 rtorrent_min_peers: 40
 rtorrent_max_peers: 100
