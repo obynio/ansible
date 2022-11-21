@@ -15,6 +15,11 @@
     shell: '/usr/sbin/nologin'
     system: true
 
+- name: install default-jre-headless
+  apt:
+    state: latest
+    name: default-jre-headless
+
 - name: download komga
   get_url:
     url: 'https://github.com/gotson/komga/releases/download/v{{ komga_version }}/komga-{{ komga_version }}.jar'

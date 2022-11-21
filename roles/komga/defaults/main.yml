@@ -5,7 +5,7 @@ komga_group_name: komga
 komga_user_home: '/var/lib/komga'
 komga_user_id: 401
 komga_group_id: 401
-komga_version: 0.157.0
+komga_version: 0.157.4
 
 komga_cookie_key: 'changeMe!'
 komga_cookie_validity: '30d'
