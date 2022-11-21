@@ -2,18 +2,12 @@
 
 {% if ansible_distribution == 'Debian' %}
 deb http://deb.debian.org/debian {{ ansible_distribution_release }} main contrib non-free
+deb http://deb.debian.org/debian {{ ansible_distribution_release }}-security main contrib non-free
 deb http://deb.debian.org/debian {{ ansible_distribution_release }}-updates main contrib non-free
-deb http://security.debian.org/ {{ ansible_distribution_release }}/updates main contrib non-free
 deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free
 {% elif ansible_distribution == 'Ubuntu' %}
-deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main restricted
-deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates main restricted
-deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
-deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates universe
-deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} multiverse
-deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-updates multiverse
-deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }}-backports main restricted universe multiverse
-deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security main restricted
-deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security universe
-deb http://security.ubuntu.com/ubuntu {{ ansible_distribution_release }}-security multiverse
+deb http://ports.ubuntu.com/ {{ ansible_distribution_release }} main restricted universe multiverse
+deb http://ports.ubuntu.com/ {{ ansible_distribution_release }}-security main restricted universe multiverse
+deb http://ports.ubuntu.com/ {{ ansible_distribution_release }}-updates main restricted universe multiverse
+deb http://ports.ubuntu.com/ {{ ansible_distribution_release }}-backports main restricted universe multiverse
 {% endif -%}

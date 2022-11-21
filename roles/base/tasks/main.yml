@@ -43,6 +43,16 @@
       - mtr
       - ansible
 
+
+- name: install python dev environment
+  apt:
+    state: latest
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+      - python3-wheel
+
 - name: create group shepard
   group:
       name: shepard
