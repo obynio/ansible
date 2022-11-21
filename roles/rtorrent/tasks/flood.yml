@@ -1,12 +1,12 @@
 ---
 - name: download nodejs
   get_url:
-    url: https://deb.nodesource.com/setup_lts.x
+    url: https://deb.nodesource.com/setup_16.x
     dest: /tmp
     mode: 755
 
 - name: setup nodejs
-  command: /tmp/setup_lts.x
+  command: /tmp/setup_16.x
 
 - name: install nodejs
   apt:
