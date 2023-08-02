@@ -52,6 +52,7 @@
       - python3-pip
       - python3-venv
       - python3-wheel
+      - python-is-python3
 
 - name: create group shepard
   group:
