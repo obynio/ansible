@@ -5,7 +5,7 @@
 These are my Ansible roles that I use to setup my infrastructure.
 These playbook were designed to run against ArchLinux.
 
-You can run the playbooks using `ansible-playbook playbook/base.yml` or `vagrant provision`.
+You can run the playbooks using `ansible-playbook playbooks/base.yml` or `vagrant provision`.
 When running on localhost, put the repository in `/etc/ansible`.
 
 ## Vault
