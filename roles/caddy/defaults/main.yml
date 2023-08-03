@@ -4,7 +4,7 @@ caddy_bin_path: /usr/bin/caddy
 caddy_log_path: /var/log/caddy
 caddy_config_path: /etc/caddy
 caddy_user_name: caddy
-caddy_group_name: caddy
+caddy_group_name: srv
 caddy_user_home: /var/lib/caddy
 caddy_user_id: 333
 caddy_group_id: 333
@@ -17,6 +17,7 @@ caddy_vhost_defaults:
   compress: true
   proxy_host: null
   proxy_transparent_disable: false
+  use_xscheme_https: false
   security_headers: false
   file_server: false
   basicauth: false

@@ -3,6 +3,7 @@
   when: ansible_architecture == 'aarch64'
   get_url:
     url: https://caddyserver.com/api/download?os=linux&arch=arm64&p=github.com%2Fcaddy-dns%2Fgandi
+    http_agent: 'Mozilla/5.0'
     dest: '{{ caddy_bin_path }}'
     mode: '0755'
     force: true
@@ -11,6 +12,7 @@
   when: ansible_architecture == 'x86_64'
   get_url:
     url: https://caddyserver.com/api/download?os=linux&arch=amd64&p=github.com%2Fcaddy-dns%2Fgandi
+    http_agent: 'Mozilla/5.0'
     dest: '{{ caddy_bin_path }}'
     mode: '0755'
     force: true
@@ -18,14 +20,12 @@
 - name: create caddy group
   group:
     name: '{{ caddy_group_name }}'
-    gid: '{{ caddy_group_id }}'
     system: true
 
 - name: create caddy user
   user:
     name: '{{ caddy_user_name }}'
-    uid: '{{ caddy_user_id | int }}'
-    group: '{{ caddy_group_id | int }}'
+    group: '{{ caddy_group_name }}'
     home: '{{ caddy_user_home }}'
     create_home: true
     shell: '/usr/sbin/nologin'

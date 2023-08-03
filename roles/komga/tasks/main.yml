@@ -1,11 +1,11 @@
 ---
-- name: create torrent group
+- name: create komga group
   group:
     name: '{{ komga_group_name }}'
     gid: '{{ komga_group_id }}'
     system: true
 
-- name: create torrent user
+- name: create komga user
   user:
     name: '{{ komga_user_name }}'
     uid: '{{ komga_user_id | int }}'

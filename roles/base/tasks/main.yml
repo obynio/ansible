@@ -7,9 +7,14 @@
     - en_US.UTF-8
     - fr_FR.UTF-8
 
-- name: set timezone to paris
+- name: set localtime to tokyo
   timezone:
-    name: Europe/Paris
+    name: Asia/Tokyo
+
+- name: remove redundant timezone file
+  file:
+    state: absent
+    path: /etc/timezone
 
 - name: add sources.list
   template:
@@ -43,7 +48,6 @@
       - mtr
       - ansible
 
-
 - name: install python dev environment
   apt:
     state: latest
@@ -54,16 +58,21 @@
       - python3-wheel
       - python-is-python3
 
+- name: clean default user home skeleton
+  file:
+    state: absent
+    path: /etc/skel
+
 - name: create group shepard
   group:
-      name: shepard
+      name: users
       state: present
 
 - name: create user shepard
   user:
     name: shepard
     shell: /bin/zsh
-    groups: sudo,shepard
+    groups: sudo,users
 
 - import_tasks: prezto.yml
   vars:

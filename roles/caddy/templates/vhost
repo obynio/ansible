@@ -35,6 +35,8 @@
     header_up -X-Forwarded-For
     header_up -X-Forwarded-Proto
     header_up -Host
+  } {% elif vhost.use_xscheme_https %} {
+    header_up X-Scheme https
   } {% endif %}
 {% endif %}
 
