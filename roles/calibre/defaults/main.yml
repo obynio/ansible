@@ -1,0 +1,8 @@
+---
+# config
+calibre_user_name: calibre
+calibre_group_name: srv
+calibre_user_home: '/srv/calibre'
+calibre_version: 0.6.20
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

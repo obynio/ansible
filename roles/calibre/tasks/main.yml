@@ -1,0 +1,56 @@
+---
+- name: create calibre group
+  group:
+    name: '{{ calibre_group_name }}'
+    system: true
+
+- name: create calibre user
+  user:
+    name: '{{ calibre_user_name }}'
+    group: '{{ calibre_group_name }}'
+    home: '{{ calibre_user_home }}'
+    create_home: true
+    shell: '/usr/sbin/nologin'
+    system: true
+
+- name: make sure we have all packages
+  package:
+      name: python3-pip,python3-virtualenv,python3-dev,libldap2-dev,libsasl2-dev
+      state: present
+
+- name: install calibre
+  become: yes
+  become_user: '{{ calibre_user_name }}'
+  git:
+    repo: https://github.com/janeczku/calibre-web
+    dest: '{{ calibre_user_home }}'
+    version: '{{ calibre_version }}'
+    force: yes
+
+- name: install required packages
+  become: yes
+  become_user: '{{ calibre_user_name }}'
+ 
+  pip:
+    state: latest
+    requirements: '{{ calibre_user_home }}/requirements.txt'
+    virtualenv_python: python3
+    virtualenv: '{{ calibre_user_home }}/venv'
+
+- name: install optional packages
+  become: yes
+  become_user: '{{ calibre_user_name }}'
+  pip:
+    state: latest
+    requirements: '{{ calibre_user_home }}/optional-requirements.txt'
+    virtualenv_python: python3
+    virtualenv: '{{ calibre_user_home }}/venv'
+
+- name: create calibre systemd service
+  template:
+    src: calibre.service.j2
+    dest: /etc/systemd/system/calibre.service
+    mode: 0644
+  notify: service modified
+
+# vim: set et st=2 sts=2 sw=2 ts=2:
