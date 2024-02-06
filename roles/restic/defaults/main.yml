@@ -3,9 +3,9 @@ restic_repository_name: 'restic'
 restic_forget: false
 restic_forget_keep_within: '30d'
 restic_systemd_timer: '*-*-* 05:00:00'
-restic_folders:
-  - {path: '/etc', options: '--tag config'}
 restic_databases:
   - {name: 'outline', dump_command: 'sudo -Hiu postgres pg_dump -Fc outline', options: '--tag postgresql'}
+restic_folders:
+  - {path: '/etc', options: '--tag config'}
 
 # vim: set et st=2 sts=2 sw=2 ts=2:

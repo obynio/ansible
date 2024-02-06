@@ -30,6 +30,7 @@
     create_home: true
     shell: '/usr/sbin/nologin'
     system: true
+    skeleton: false
 
 - name: create systemd service
   template:
