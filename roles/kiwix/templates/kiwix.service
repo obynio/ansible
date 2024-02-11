@@ -1,0 +1,18 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=Kiwix
+Documentation=https://kiwix.org/
+After=network.target
+
+[Service]
+User={{ kiwix_user_name }}
+Group={{ kiwix_group_name }}
+ProtectSystem=true
+ProtectKernelTunables=true
+ExecStart=/usr/bin/bash -c "/usr/local/bin/kiwix-serve -p {{ kiwix_port }} {{ kiwix_zim_serve }}"
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

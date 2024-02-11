@@ -1,0 +1,19 @@
+---
+
+- name: systemctl daemon-reload
+  listen: service modified
+  service:
+    daemon_reload: true
+
+- name: kiwix restart
+  listen: service modified
+  service:
+    name: kiwix
+    state: restarted
+
+- name: kiwix reload
+  service:
+    name: kiwix
+    state: reloaded
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

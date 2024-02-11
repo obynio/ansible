@@ -1,0 +1,9 @@
+---
+# config
+kiwix_user_name: kiwix
+kiwix_group_name: srv
+kiwix_user_home: /var/lib/kiwix
+kiwix_zim_serve: /var/lib/kiwix/*.zim
+kiwix_port: 8080
+
+# vim: set et st=2 sts=2 sw=2 ts=2:
