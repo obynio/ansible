@@ -20,9 +20,7 @@ rtorrent_schedules:
   - 'watch_start, 11, 10, ((load.start, (cat, (cfg.watch), "start/*.torrent")))'
   - 'watch_load, 12, 10, ((load.normal, (cat, (cfg.watch), "load/*.torrent")))'
 
-rtorrent_port_range_start: 46157
-rtorrent_port_range_end: 47169
-rtorrent_port_range: '{{ rtorrent_port_range_start }}-{{ rtorrent_port_range_end }}'
+rtorrent_port_range: '62820'
 rtorrent_port_random: yes
 
 rtorrent_check_hash: no

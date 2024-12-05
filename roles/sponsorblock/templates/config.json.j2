@@ -1,0 +1,29 @@
+{
+    "devices": [
+{% for screen in sponsorblock_screens %}
+        {
+            "screen_id": "{{ screen.id }}",
+            "name": "{{ screen.name }}",
+            "offset": 0
+        }
+{% endfor %}
+    ],
+    "apikey": "{{ sponsorblock_youtube_key }}",
+    "skip_categories": [
+        "sponsor",
+        "selfpromo",
+        "intro",
+        "outro",
+        "music_offtopic",
+        "interaction",
+        "exclusive_access",
+        "poi_highlight",
+        "preview",
+        "filler"
+    ],
+    "channel_whitelist": [],
+    "skip_count_tracking": true,
+    "mute_ads": true,
+    "skip_ads": true,
+    "auto_play": true
+}

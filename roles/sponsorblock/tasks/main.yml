@@ -1,0 +1,59 @@
+---
+- name: create sponsorblock group
+  group:
+    name: '{{ sponsorblock_group_name }}'
+    system: true
+
+- name: create sponsorblock user
+  user:
+    name: '{{ sponsorblock_user_name }}'
+    group: '{{ sponsorblock_group_name }}'
+    home: '{{ sponsorblock_user_home }}'
+    create_home: true
+    shell: '/usr/sbin/nologin'
+    system: true
+
+- name: make sure we have all packages
+  package:
+      name: python3-pip,python3-virtualenv,python3-dev,libldap2-dev,libsasl2-dev
+      state: present
+
+- name: install sponsorblock
+  become: yes
+  become_user: '{{ sponsorblock_user_name }}'
+  git:
+    repo: https://github.com/dmunozv04/iSponsorBlockTV.git
+    dest: '{{ sponsorblock_user_home }}'
+    force: yes
+
+- name: install required packages
+  become: yes
+  become_user: '{{ sponsorblock_user_name }}'
+ 
+  pip:
+    state: latest
+    requirements: '{{ sponsorblock_user_home }}/requirements.txt'
+    virtualenv_python: python3
+    virtualenv: '{{ sponsorblock_user_home }}/venv'
+
+- name: ensures data dir exists
+  file: 
+    path: "{{ sponsorblock_user_home }}/data"
+    state: directory
+
+- name: configure sponsorblock
+  template:
+    src: config.json.j2
+    dest: "{{ sponsorblock_user_home }}/data/config.json"
+    owner: "{{ sponsorblock_user_name }}"
+    group: "{{ sponsorblock_group_name }}"
+    mode: 0644
+
+- name: create sponsorblock systemd service
+  template:
+    src: sponsorblock.service.j2
+    dest: /etc/systemd/system/sponsorblock.service
+    mode: 0644
+  notify: service modified
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

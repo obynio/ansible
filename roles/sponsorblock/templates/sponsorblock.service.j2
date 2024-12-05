@@ -1,0 +1,15 @@
+[Unit]
+Description=SponsorBlock
+After=network.target
+
+[Service]
+Type=simple
+User={{ sponsorblock_user_name }}
+Group=srv
+WorkingDirectory={{ sponsorblock_user_home }}
+ExecStart={{ sponsorblock_user_home }}/venv/bin/python3 {{ sponsorblock_user_home }}/src/main.py --data {{ sponsorblock_user_home }}/data
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

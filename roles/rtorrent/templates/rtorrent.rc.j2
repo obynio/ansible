@@ -42,7 +42,7 @@ schedule2 = {{ schedule }}
 {% endfor -%}
 
 # Port range to use for listening.
-network.port_range.set = {{ rtorrent_port_range }}
+network.port_range.set = {{ rtorrent_port_range }}-{{ rtorrent_port_range }}
 
 # Start opening ports at a random position within the port range.
 network.port_random.set = {{ rtorrent_port_random|ternary('yes', 'no') }}

@@ -1,0 +1,9 @@
+---
+# config
+sponsorblock_user_name: sponsorblock
+sponsorblock_group_name: srv
+sponsorblock_user_home: '/var/lib/sponsorblock'
+sponsorblock_youtube_key: ''
+sponsorblock_screens: []
+
+# vim: set et st=2 sts=2 sw=2 ts=2:

@@ -5,12 +5,11 @@
     "api_key_tvmaze": null,
     "batch": false,
     "episode_api": "tvdb",
-    "episode_directory": "/mnt/data/anime/{series}/Season {season:02}",
-    "episode_format": "{series} - S{season:02}E{episode:02} - {title}.{extension}",
+    "episode_directory": "/mnt/data/anime/{series}/Season {season:01}",
+    "episode_format": "{series}.s{season:01}e{episode:02}.{extension}",
     "hits": 5,
     "ignore": [
-        ".*sample.*",
-        "^RARBG.*"
+        ".*sample.*"
     ],
     "language": "en",
     "lower": false,
@@ -27,7 +26,7 @@
     ],
     "movie_api": "tmdb",
     "movie_directory": "/mnt/data/movies/{name}",
-    "movie_format": "{name}.{extension}",
+    "movie_format": "{name}.{year}.{extension}",
     "no_guess": true,
     "no_overwrite": true,
     "no_style": false,
